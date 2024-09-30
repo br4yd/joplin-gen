@@ -6,3 +6,18 @@ In the file creation process you will need to select the Hotfolder defined via t
 
 ## Why does it exist?
 Simple. Joplin has not really good support or plugins for creating a good and nice template for the purpose of adding books with some key information to track the process and I'm to lazy to actually copy and paste a empty template back and forth which can create human error. So to solve this, this exists. I also wanted to have a GUI and not a terminal programm, because a GUI makes it easy to build on top of this software to be able to add quotes and my opinion to every quote in the future too. They could be created when creating a book and put into the same file. As a book can have one or one hundred quotes + opinions marked and written by the reader a GUI makes more sense which could implement some kind of visible feedback for already added quotes before actually creating the file in the Joplin Hotfolder.
+
+## Building from source
+You need to have Rust and the cargo toolchain installed on your computer. There is a documentation on that on the official Rust website: https://www.rust-lang.org/tools/install
+
+After you have this installed clone this repository:  
+```bash
+git clone https://github.com/br4yd/joplin-gen
+```
+
+Now go into the cloned directory and build the project as a release optimized version:
+```bash
+cargo build -r
+```
+
+You should now have a `target` sub-directory containing the executable file for your OS. For me this is in `target/release`.
