@@ -5,7 +5,9 @@ use dirs::home_dir;
 
 use indoc::indoc;
 
-pub fn save_book(author: String, booktitle: String) {
+use crate::Status;
+
+pub fn save_book(author: String, booktitle: String, publish_year: String, page_count: String, iban: String, status: Status, beginning_date: String, finished_date: String, book_rating: f32) {
     let default_dir = home_dir();
 
     // Open a file selection window to select the storage location
@@ -22,7 +24,7 @@ pub fn save_book(author: String, booktitle: String) {
 
     if let Some(path) = save_path {
         // Create the file name based on author and title 
-        let filename = format!("{} - {}.md", author, booktitle);
+        let filename = format!("📚 {} - {}.md", author, booktitle);
         let full_path = path.join(filename);
 
         // Try to create and write the file
@@ -31,12 +33,33 @@ pub fn save_book(author: String, booktitle: String) {
                 // Create the Markdown table content
                 let content = format!(
                     indoc!( // TODO: i18n within the string depending on language
-                        "| Label | Value |
+                        "## Book data
+                        | Label | Value |
                         |---|---|
                         | Author | {} |
-                        | Title | {} |"
+                        | Title | {} |
+                        | Publish year | {} |
+                        | Pages | {} |
+                        | IBAN  | {} |
+                        | Status | {} |  
+                        | Reading started | {} |
+                        | Reading finished | {} |
+                        | Rating | {} ★ |
+                        
+                        ## Opinion / Booknotes
+                        
+                        ## Quotes
+                        
+                        "
                     ),
-                    author, booktitle
+                    author, 
+                    booktitle, 
+                    publish_year, 
+                    page_count, 
+                    iban, status, 
+                    beginning_date,
+                    finished_date,
+                    book_rating
                 );
 
                 if let Err(e) = file.write_all(content.as_bytes()) {
