@@ -7,6 +7,9 @@ on:
     branches:
       - "main"
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Create Release
@@ -35,7 +38,7 @@ jobs:
             Changes since last release:
             ${{ steps.changelog.outputs.changelog }}
         env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Changelog
         id: changelog
@@ -75,4 +78,4 @@ jobs:
             dist/windows/*
             dist/macos/*
         env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
