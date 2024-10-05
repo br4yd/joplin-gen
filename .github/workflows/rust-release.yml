@@ -71,6 +71,20 @@ jobs:
           mkdir -p dist/windows
           cp -r target/x86_64-pc-windows-gnu/release/* dist/windows/
 
+  build_macos:
+    name: Build MacOS Release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
       - name: Build MacOS Release
         run: |
           rustup target add x86_64-apple-darwin aarch64-apple-darwin
@@ -80,12 +94,10 @@ jobs:
           cp -r target/x86_64-apple-darwin/release/* dist/macos/joplin-gen-x86_64-apple-darwin
           cp -r target/aarch64-apple-darwin/release/* dist/macos/joplin-gen-aarch64-apple-darwin
 
-      - name: Upload Release Assets
+      - name: Upload MacOS Release Assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/linux/*
-            dist/windows/*
             dist/macos/*
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
