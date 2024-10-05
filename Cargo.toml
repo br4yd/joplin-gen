@@ -11,3 +11,9 @@ rfd = "0.15.0"
 dirs = "5.0.1"
 indoc = "2.0.5"
 egui_extras = "0.29.1"
+
+fluent = "0.16.1"
+fluent-bundle = "0.15.3"
+fluent-resmgr = "0.0.7"
+unic-langid = { version = "0.9", features = ["macros"] }
+sys-locale = "0.3"

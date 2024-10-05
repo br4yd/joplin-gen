@@ -4,9 +4,11 @@ use eframe::egui;
 use crate::{JoplinGenerator, View};
 
 pub fn render_new_person_view(ui: &mut egui::Ui, app: &mut JoplinGenerator) {
-    ui.heading("New Person");
+    let localization = &app.localization;
+
+    ui.heading(localization.translate("new-person"));
     // TODO: Everything in this part - currently just a placeholder
-    if ui.button("Save Person").clicked() {
+    if ui.button(localization.translate("save-person-button")).clicked() {
         app.current_view = View::Home; 
     }
 }
