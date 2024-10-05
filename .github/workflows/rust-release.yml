@@ -60,8 +60,8 @@ jobs:
           cross build --release --target x86_64-unknown-linux-gnu
           cross build --release --target aarch64-unknown-linux-gnu
           mkdir -p dist/linux
-          cp target/x86_64-unknown-linux-gnu/release/* dist/linux/
-          cp target/aarch64-unknown-linux-gnu/release/* dist/linux/
+          cp -r target/x86_64-unknown-linux-gnu/release/* dist/linux/
+          cp -r target/aarch64-unknown-linux-gnu/release/* dist/linux/
 
       - name: Build Windows Release
         run: |
@@ -69,7 +69,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y mingw-w64
           cargo build --release --target x86_64-pc-windows-gnu
           mkdir -p dist/windows
-          cp target/x86_64-pc-windows-gnu/release/* dist/windows/
+          cp -r target/x86_64-pc-windows-gnu/release/* dist/windows/
 
       - name: Build MacOS Release
         run: |
@@ -77,8 +77,8 @@ jobs:
           cross build --release --target x86_64-apple-darwin
           cross build --release --target aarch64-apple-darwin
           mkdir -p dist/macos
-          cp target/x86_64-apple-darwin/release/* dist/macos/joplin-gen-x86_64-apple-darwin
-          cp target/aarch64-apple-darwin/release/* dist/macos/joplin-gen-aarch64-apple-darwin
+          cp -r target/x86_64-apple-darwin/release/* dist/macos/joplin-gen-x86_64-apple-darwin
+          cp -r target/aarch64-apple-darwin/release/* dist/macos/joplin-gen-aarch64-apple-darwin
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v1
