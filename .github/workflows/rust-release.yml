@@ -1,0 +1,78 @@
+name: Rust Release
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger on new tags starting with "v"
+    branches:
+      - "main"
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Install cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            Changes since last release:
+            ${{ steps.changelog.outputs.changelog }}
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^)
+          echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
+          CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s")
+          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+
+      - name: Build Linux Release
+        run: |
+          cross build --release --target x86_64-unknown-linux-gnu
+          cross build --release --target aarch64-unknown-linux-gnu
+          mkdir -p dist/linux
+          cp target/x86_64-unknown-linux-gnu/release/* dist/linux/
+          cp target/aarch64-unknown-linux-gnu/release/* dist/linux/
+
+      - name: Build Windows Release
+        run: |
+          cross build --release --target x86_64-pc-windows-msvc
+          mkdir -p dist/windows
+          cp target/x86_64-pc-windows-msvc/release/* dist/windows/
+
+      - name: Build MacOS Release
+        run: |
+          cross build --release --target x86_64-apple-darwin
+          cross build --release --target aarch64-apple-darwin
+          mkdir -p dist/macos
+          cp target/x86_64-apple-darwin/release/* dist/macos/
+          cp target/aarch64-apple-darwin/release/* dist/macos/
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/linux/*
+            dist/windows/*
+            dist/macos/*
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
