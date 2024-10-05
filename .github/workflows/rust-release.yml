@@ -74,8 +74,8 @@ jobs:
       - name: Build MacOS Release
         run: |
           rustup target add x86_64-apple-darwin aarch64-apple-darwin
-          cross build --release --target x86_64-apple-darwin
-          cross build --release --target aarch64-apple-darwin
+          cargo build --release --target x86_64-apple-darwin
+          cargo build --release --target aarch64-apple-darwin
           mkdir -p dist/macos
           cp -r target/x86_64-apple-darwin/release/* dist/macos/joplin-gen-x86_64-apple-darwin
           cp -r target/aarch64-apple-darwin/release/* dist/macos/joplin-gen-aarch64-apple-darwin
