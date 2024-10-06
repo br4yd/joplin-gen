@@ -3,6 +3,7 @@ new-book = Neues Buch
 new-person = Neue Person
 back-button = Zurück
 save-person-button = Save Person
+back-person-button = Zurück
 
 new-book-view-author = Autor:
 new-book-view-title = Titel:

@@ -11,4 +11,8 @@ pub fn render_new_person_view(ui: &mut egui::Ui, app: &mut JoplinGenerator) {
     if ui.button(localization.translate("save-person-button")).clicked() {
         app.current_view = View::Home; 
     }
+
+    if ui.button(localization.translate("back-person-button")).clicked() {
+        app.current_view = View::Home;
+    }
 }
