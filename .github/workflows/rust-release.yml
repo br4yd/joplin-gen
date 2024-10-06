@@ -36,12 +36,14 @@ jobs:
           LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
           if [ -z "$LAST_TAG" ]; then
             echo "No previous tag found, assuming initial release."
-            CHANGELOG=$(git log --pretty=format:"- %s (%h by @$GITHUB_ACTOR)" | sed 's/$/\\n/')
+            CHANGELOG=$(git log --pretty=format:"- %s (%h by @$GITHUB_ACTOR)")
           else
             echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
-            CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h by @$GITHUB_ACTOR)" | sed 's/$/\\n/')
+            CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h by @$GITHUB_ACTOR)")
           fi
-          echo "changelog=${CHANGELOG}" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -51,7 +53,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             Changes since last release:
-            ${{ steps.changelog.outputs.changelog }}
+            ${{ env.changelog }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
