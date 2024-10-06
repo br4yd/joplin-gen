@@ -145,13 +145,6 @@ impl Localization {
     }
 }
 
-
-impl JoplinGenerator {
-    pub fn set_language(&mut self, locale: &str) {
-        self.localization = Arc::new(Localization::new(locale));
-    }
-}
-
 pub fn get_default_locale() -> String {
     if let Some(locale) = get_locale() {
         let lang = locale.split('_').next().unwrap_or("en");
