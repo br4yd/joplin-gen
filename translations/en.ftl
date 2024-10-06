@@ -1,5 +1,4 @@
 app-title = Joplin Generator
-language = Language:
 new-book = New Book
 new-person = New Person
 back-button = Back
