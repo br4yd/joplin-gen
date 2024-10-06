@@ -113,30 +113,3 @@ jobs:
             dist/macos/*
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-
-  deploy_github_pages:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: release
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Rust for WASM
-        run: rustup target add wasm32-unknown-unknown
-
-      - name: Build WASM
-        run: |
-          cargo build --release --target wasm32-unknown-unknown
-          wasm-bindgen --target web --out-dir docs/pkg target/wasm32-unknown-unknown/release/joplin-gen.wasm
-
-      - name: Copy HTML and Static Files
-        run: |
-          mkdir -p docs
-          cp index.html docs/
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.REPO_TOKEN }}
-          publish_dir: ./docs
