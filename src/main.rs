@@ -7,9 +7,11 @@ use fluent_bundle::{FluentBundle, FluentResource};
 use sys_locale::get_locale;
 use unic_langid::LanguageIdentifier;
 
-use std::fs;
-use std::path::PathBuf;
 use std::sync::Arc;
+
+use include_dir::{include_dir, Dir};
+
+static TRANSLATIONS: Dir = include_dir!("translations");
 
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -105,29 +107,22 @@ pub struct Localization {
 
 impl Localization {
     pub fn new(locale: &str) -> Self {
-        // Try to parse the provided locale into a LanguageIdentifier
         let langid: LanguageIdentifier = locale.parse().expect("Invalid language identifier");
         let mut bundle = FluentBundle::new(vec![langid]);
 
-        // Construct the path to the translation file
-        let mut path = PathBuf::from(format!("translations/{}.ftl", locale));
-        if !path.exists() {
-            // Fallback to English if the translation file for the given locale does not exist
-            println!("Translation file not found for locale '{}', falling back to 'en'", locale);
-            path = PathBuf::from("translations/en.ftl");
-        } else {
-            println!("Translation file found for locale '{}'", locale);
-        }
+        // Try to load the translation file from the included directory
+        let file_name = format!("{}.ftl", locale);
+        let source = TRANSLATIONS
+            .get_file(file_name)
+            .or_else(|| TRANSLATIONS.get_file("en.ftl"))
+            .expect("Translation file not found")
+            .contents_utf8()
+            .expect("Unable to read translation file");
 
-        // Try to read the translation file
-        let source = fs::read_to_string(&path).expect("Unable to read translation file");
-        let resource = FluentResource::try_new(source).expect("Unable to parse translation file");
+        let resource = FluentResource::try_new(source.to_string()).expect("Unable to parse translation file");
 
-        // Add the resource to the Fluent bundle
         bundle.add_resource(Arc::new(resource)).expect("Failed to add resource to bundle");
 
-        println!("Successfully loaded translation file: {:?}", path);
-        
         Localization { bundle }
     }
 

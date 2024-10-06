@@ -1,6 +1,6 @@
 [package]
 name = "joplin-gen"
-version = "0.2.20"
+version = "0.2.21"
 edition = "2021"
 
 [dependencies]
@@ -17,3 +17,4 @@ fluent-bundle = "0.15.3"
 fluent-resmgr = "0.0.7"
 unic-langid = { version = "0.9", features = ["macros"] }
 sys-locale = "0.3"
+include_dir = "0.7.4"
