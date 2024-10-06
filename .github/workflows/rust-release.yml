@@ -36,10 +36,10 @@ jobs:
           LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
           if [ -z "$LAST_TAG" ]; then
             echo "No previous tag found, assuming initial release."
-            CHANGELOG=$(git log --pretty=format:"- %s (%h by @$(git show -s --format='%ae' %H))")
+            CHANGELOG=$(git log --pretty=format:"- %s (%h by @%an)")
           else
             echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
-            CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h by @$(git show -s --format='%ae' %H))")
+            CHANGELOG=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%h by @%an)")
           fi
           echo "changelog=${CHANGELOG}" >> $GITHUB_OUTPUT
 
