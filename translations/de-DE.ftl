@@ -2,7 +2,7 @@ app-title = Joplin Generator
 new-book = Neues Buch
 new-person = Neue Person
 back-button = Zurück
-save-person-button = Save Person
+save-person-button = Person speichern
 back-person-button = Zurück
 
 new-book-view-author = Autor:
